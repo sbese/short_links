@@ -1,0 +1,5 @@
+uvicorn==0.15.0
+fastapi==0.68.1
+odmantic==0.3.5
+python-multipart==0.0.5
+python-dotenv~=0.14.0

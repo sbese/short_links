@@ -1,0 +1,37 @@
+version: "3.8"
+x-mongo_auth: &x-mongo_auth
+  MONGO_INITDB_ROOT_USERNAME: $MONGO_INITDB_ROOT_USERNAME
+  MONGO_INITDB_ROOT_PASSWORD: $MONGO_INITDB_ROOT_PASSWORD
+
+services:
+  short_link:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: short_link
+    restart: always
+    environment:
+      <<: *x-mongo_auth
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 9050:80
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    restart: unless-stopped
+    environment:
+      <<: *x-mongo_auth
+      MONGO_INITDB_DATABASE: base
+      MONGODB_DATA_DIR: /data/db
+    volumes:
+      - ./mongodbdata:/data/db
+    ports:
+      - 27010:27017
+
+volumes:
+  mongodbdata:
+    driver: local
